@@ -5,7 +5,7 @@ import "./index.css"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App title="Blog Post" body="This is my first blog post" />
+    <App title='Blog Post' body='This is my first blog post' />
   </React.StrictMode>,
   document.getElementById("root")
 )

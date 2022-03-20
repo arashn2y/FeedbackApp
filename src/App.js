@@ -1,11 +1,26 @@
+import { useState } from "react"
 import Header from "./components/Header"
+import FeedbackList from "./components/FeedbackList"
+import FeedbackStats from "./components/FeedbackStats"
+import { feedbackData } from "./data/Feedback"
+import FeedbackForm from "./components/FeedbackForm"
 
-const App = props => {
+const App = () => {
+  const [feedback, setFeedback] = useState(feedbackData)
+
+  const DeleteFeedback = id => {
+    window.confirm('Are you sure?')
+    const NewFeedbackList = feedback.filter(item => item.id !== id)
+    setFeedback(NewFeedbackList)
+  }
+
   return (
     <>
       <Header />
       <div className="container">
-        <h1>My App</h1>
+      <FeedbackStats feedback={feedback}/>
+      <FeedbackForm />
+      <FeedbackList feedback={feedback} DeleteFeedback={DeleteFeedback}/>
       </div>
     </>
   )
