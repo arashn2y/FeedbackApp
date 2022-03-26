@@ -1,13 +1,23 @@
+import { motion, AnimatePresence } from "framer-motion"
+
 import FeedbackItem from "./FeedbackItem"
 
-const FeedbackList = ({ feedback, DeleteFeedback }) => {
-
-  
+const FeedbackList = ({ feedback, deleteFeedback }) => {
   return (
     <div className='feeback-list'>
-      {feedback.length
-        ? feedback.map(item => <FeedbackItem key={item.id} item={item} DeleteFeedback={() => DeleteFeedback(item.id)} />)
-        : "No Feedback"}
+      <AnimatePresence>
+        {feedback.length
+          ? feedback.map(item => (
+            <motion.div key={item.id} initial={{opacity: 0}} animate={{ opacity : 1 }} exit={{ opacity: 0}}>
+              <FeedbackItem
+                key={item.id}
+                item={item}
+                DeleteFeedback={() => deleteFeedback(item.id)}
+              />
+              </motion.div>
+            ))
+          : "No Feedback"}
+      </AnimatePresence>
     </div>
   )
 }
