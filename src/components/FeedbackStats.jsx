@@ -1,4 +1,9 @@
-const FeedbackStats = ({ feedback }) => {
+import { useContext } from "react";
+import FeedbackContext from "../context/FeedbackContext";
+
+const FeedbackStats = () => {
+
+  const {feedback} = useContext(FeedbackContext)
 
   const rating = feedback.reduce((prevValue, currValue) => prevValue + currValue.rating, 0)
   const averageRating = feedback.length ? (rating / feedback.length).toFixed(1).replace(/[.,]0$/, ''): 0;
