@@ -5,37 +5,44 @@ import Rating from "./Rating"
 import Button from "./shared/Button"
 import Card from "./shared/Card"
 
-const FeedbackForm = ({ addHandler }) => {
-  const { addFeedback } = useContext(FeedbackContext)
+const FeedbackForm = () => {
+  const { addFeedback, selectedFeedback, editFeedback } = useContext(FeedbackContext)
   const [text, setText] = useState("")
   const [rating, setRating] = useState(10)
   const [btnDisabled, setBtnDisabled] = useState(true)
   const [message, setMessage] = useState("")
 
   useEffect(() => {
-    if (text === "") {
+    if (selectedFeedback.isEdit) {
+      setText(selectedFeedback.item.text)
+      setRating(selectedFeedback.item.rating)
+      setBtnDisabled(false)
+    }
+  }, [selectedFeedback])
+
+  const textChangeHandler = e => {
+    if (e.target.value === "") {
       setMessage(null)
       setBtnDisabled(true)
-    } else if (text !== "" && text.length < 11) {
+    } else if (e.target.value.length < 10) {
       setMessage("Text must be at least 10 characters")
       setBtnDisabled(true)
     } else {
       setMessage(null)
       setBtnDisabled(false)
     }
-  }, [text])
-
-  const textChangeHandler = e => setText(e.target.value)
+    setText(e.target.value)
+  }
   const selectHandler = rating => setRating(rating)
   const handleSubmit = e => {
     e.preventDefault()
     if (text.trim().length > 10) {
       const newFeedback = {
-        id: Math.random() * 10,
+        id: selectedFeedback.isEdit ? selectedFeedback.item.id : Math.random() * 10,
         text,
         rating
       }
-      addFeedback(newFeedback)
+      selectedFeedback.isEdit ? editFeedback(newFeedback) : addFeedback(newFeedback)
 
       setText("")
     }
@@ -54,7 +61,7 @@ const FeedbackForm = ({ addHandler }) => {
             onChange={textChangeHandler}
           />
           <Button type='submit' isDisabled={btnDisabled}>
-            Send
+            {selectedFeedback.isEdit ? "Update" : "Submit"}
           </Button>
         </div>
         {message && <div className='message'>{message}</div>}
